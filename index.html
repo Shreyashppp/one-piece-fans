@@ -3,247 +3,544 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Grand Line Archives — One Piece Character Database</title>
+<title>Grand Line Archives | One Piece Database</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #111827;
+    --bg-card: rgba(30, 41, 59, 0.6);
+    --accent: #f59e0b;
+    --accent-hover: #fbbf24;
+    --accent-dark: #b45309;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border: rgba(245, 158, 11, 0.2);
+    --red: #dc2626;
+    --blue: #2563eb;
+    --green: #16a34a;
+    --purple: #9333ea;
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: 'Georgia', serif;
-    background: linear-gradient(135deg, #0a1929 0%, #1a3a5c 100%);
-    color: #f4e9d8;
-    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
   }
-  header {
-    background: rgba(0,0,0,0.6);
-    padding: 30px 20px;
-    text-align: center;
-    border-bottom: 3px solid #d4a017;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  h1, h2, h3, .logo { font-family: 'Cinzel', serif; }
+
+  /* NAVIGATION */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(10, 14, 26, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  header h1 {
-    font-size: 2.8rem;
-    color: #d4a017;
-    text-shadow: 2px 2px 4px #000;
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent);
     letter-spacing: 2px;
   }
-  header p { margin-top: 8px; color: #f4e9d8; font-style: italic; }
-  .controls {
-    max-width: 1200px;
-    margin: 30px auto;
-    padding: 0 20px;
+  .logo span { color: var(--text-primary); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    font-size: 0.95rem;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .menu-btn { display: none; background: none; border: none; color: var(--accent); font-size: 1.5rem; cursor: pointer; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
     display: flex;
-    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 20px 40px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at top, rgba(245, 158, 11, 0.15), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(37, 99, 235, 0.2), transparent 60%),
+      var(--bg-primary);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(220, 38, 38, 0.08) 0%, transparent 40%);
+    animation: pulse 8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent) 0%, #ef4444 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    line-height: 1.1;
+  }
+  .hero p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+  }
+  .stat-item .number {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--accent);
+  }
+  .stat-item .label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #0a0e1a;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 1px;
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+  }
+
+  /* SECTIONS */
+  section { padding: 100px 40px; max-width: 1400px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 60px; }
+  .section-header h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .section-header h2 span { color: var(--accent); }
+  .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 50px;
     flex-wrap: wrap;
     justify-content: center;
   }
   .controls input, .controls select {
-    padding: 12px 18px;
-    border: 2px solid #d4a017;
-    border-radius: 8px;
-    background: rgba(0,0,0,0.4);
-    color: #f4e9d8;
-    font-size: 1rem;
-    min-width: 220px;
+    padding: 14px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    min-width: 240px;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s;
   }
-  .controls input::placeholder { color: #aaa; }
+  .controls input:focus, .controls select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .controls input::placeholder { color: var(--text-secondary); }
+
+  /* CHARACTER GRID */
   .grid {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
   }
   .card {
-    background: rgba(20, 40, 70, 0.85);
-    border: 2px solid #d4a017;
-    border-radius: 12px;
-    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
     cursor: pointer;
-    transition: transform 0.25s, box-shadow 0.25s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
   }
   .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 24px rgba(212, 160, 23, 0.4);
+    transform: translateY(-8px);
+    border-color: var(--accent);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(245, 158, 11, 0.2);
   }
-  .card h3 { color: #d4a017; font-size: 1.4rem; margin-bottom: 8px; }
-  .card .affiliation {
+  .card-image {
+    width: 100%;
+    height: 280px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .card:hover .card-image img { transform: scale(1.08); }
+  .card-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(10, 14, 26, 0.95));
+  }
+  .card-bounty {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(220, 38, 38, 0.95);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 2;
+  }
+  .card-body { padding: 20px; flex: 1; }
+  .card-body h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .card-tag {
     display: inline-block;
-    background: #8b1a1a;
-    color: #fff;
-    padding: 3px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    margin-bottom: 10px;
+    padding: 4px 10px;
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
   }
-  .card p { font-size: 0.95rem; line-height: 1.5; }
+  .card-body p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* CREWS SECTION */
+  .crews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .crew-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .crew-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+  .crew-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+  .crew-card h3 {
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+  }
+  .crew-card p { color: var(--text-secondary); font-size: 0.9rem; }
+
+  /* DEVIL FRUITS */
+  .fruits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .fruit-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: transform 0.3s;
+  }
+  .fruit-card:hover { transform: translateY(-4px); }
+  .fruit-type {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .fruit-type.paramecia { background: rgba(220, 38, 38, 0.2); color: #f87171; }
+  .fruit-type.zoan { background: rgba(22, 163, 74, 0.2); color: #4ade80; }
+  .fruit-type.logia { background: rgba(37, 99, 235, 0.2); color: #60a5fa; }
+  .fruit-card h4 { color: var(--text-primary); margin-bottom: 6px; }
+  .fruit-card p { color: var(--text-secondary); font-size: 0.85rem; }
+
+  /* MODAL */
   .modal {
     display: none;
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.85);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
     z-index: 1000;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    animation: fadeIn 0.3s;
   }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   .modal.active { display: flex; }
   .modal-content {
-    background: linear-gradient(135deg, #1a3a5c, #0a1929);
-    border: 3px solid #d4a017;
-    border-radius: 12px;
-    padding: 35px;
-    max-width: 700px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    max-width: 800px;
     width: 100%;
-    max-height: 85vh;
+    max-height: 90vh;
     overflow-y: auto;
     position: relative;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    animation: slideUp 0.3s;
   }
-  .modal-content h2 { color: #d4a017; font-size: 2rem; margin-bottom: 15px; }
-  .modal-content .stat { margin: 10px 0; }
-  .modal-content .stat strong { color: #d4a017; }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-image {
+    height: 100%;
+    min-height: 400px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    overflow: hidden;
+  }
+  .modal-image img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-info { padding: 40px; }
+  .modal-info h2 { color: var(--accent); margin-bottom: 8px; font-size: 2rem; }
+  .modal-info .subtitle { color: var(--text-secondary); margin-bottom: 24px; font-style: italic; }
+  .modal-stats {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-card);
+    border-radius: 12px;
+  }
+  .modal-stats .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .modal-stats .row:last-child { border: none; }
+  .modal-stats .label { color: var(--text-secondary); font-weight: 600; }
+  .modal-stats .value { color: var(--text-primary); text-align: right; }
+  .modal-bio { color: var(--text-secondary); line-height: 1.7; }
   .close-btn {
     position: absolute;
-    top: 12px; right: 18px;
-    font-size: 2rem;
-    color: #d4a017;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    color: var(--accent);
+    font-size: 1.2rem;
     cursor: pointer;
-    background: none;
-    border: none;
+    z-index: 10;
+    transition: background 0.2s;
   }
+  .close-btn:hover { background: var(--accent); color: var(--bg-primary); }
+
+  /* FOOTER */
   footer {
-    text-align: center;
-    padding: 25px;
-    margin-top: 40px;
-    background: rgba(0,0,0,0.6);
-    color: #aaa;
+    background: var(--bg-secondary);
+    padding: 60px 40px 30px;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .footer-col h4 { color: var(--accent); margin-bottom: 16px; font-family: 'Cinzel', serif; }
+  .footer-col p, .footer-col a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 8px;
     font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links {
+      position: fixed;
+      top: 60px; right: 0;
+      background: var(--bg-secondary);
+      flex-direction: column;
+      padding: 20px;
+      width: 200px;
+      transform: translateX(100%);
+      transition: transform 0.3s;
+      border-left: 1px solid var(--border);
+      height: calc(100vh - 60px);
+    }
+    .nav-links.open { transform: translateX(0); }
+    .menu-btn { display: block; }
+    section { padding: 70px 20px; }
+    .modal-content { grid-template-columns: 1fr; }
+    .modal-image { min-height: 250px; }
+    .modal-info { padding: 24px; }
+    .hero-stats { gap: 30px; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>⚓ Grand Line Archives ⚓</h1>
-  <p>The Complete One Piece Character Database</p>
-</header>
+<nav>
+  <div class="logo">GRAND LINE <span>ARCHIVES</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#characters">Characters</a></li>
+    <li><a href="#crews">Crews</a></li>
+    <li><a href="#fruits">Devil Fruits</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <button class="menu-btn" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+</nav>
 
-<div class="controls">
-  <input type="text" id="search" placeholder="Search by name...">
-  <select id="filter">
-    <option value="all">All Affiliations</option>
-    <option value="Straw Hat Pirates">Straw Hat Pirates</option>
-    <option value="Yonko">Yonko</option>
-    <option value="Warlord">Warlord</option>
-    <option value="Marine">Marine</option>
-    <option value="Revolutionary">Revolutionary</option>
-    <option value="Other">Other</option>
-  </select>
-</div>
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h1>THE ONE PIECE<br>IS REAL</h1>
+    <p>The most comprehensive fan-curated database of every legend, pirate, marine, and revolutionary across the Grand Line.</p>
+    <a href="#characters" class="cta-btn">Explore Characters</a>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="number" id="charCount">30+</div>
+        <div class="label">Characters</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">4</div>
+        <div class="label">Yonko</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">∞</div>
+        <div class="label">Adventure</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<div class="grid" id="grid"></div>
+<section id="characters">
+  <div class="section-header">
+    <h2>Character <span>Database</span></h2>
+    <p>Every legend who ever set sail. Search, filter, and explore.</p>
+  </div>
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search by name...">
+    <select id="filter">
+      <option value="all">All Affiliations</option>
+      <option value="Straw Hat Pirates">Straw Hat Pirates</option>
+      <option value="Yonko">Yonko</option>
+      <option value="Warlord">Warlord</option>
+      <option value="Marine">Marine</option>
+      <option value="Revolutionary">Revolutionary</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="crews">
+  <div class="section-header">
+    <h2>Major <span>Crews & Factions</span></h2>
+    <p>The forces shaping the world.</p>
+  </div>
+  <div class="crews-grid" id="crewsGrid"></div>
+</section>
+
+<section id="fruits">
+  <div class="section-header">
+    <h2>Devil <span>Fruits</span></h2>
+    <p>Mysterious fruits granting godlike abilities at the cost of swimming.</p>
+  </div>
+  <div class="fruits-grid" id="fruitsGrid"></div>
+</section>
+
+<section id="about">
+  <div class="section-header">
+    <h2>About <span>This Archive</span></h2>
+  </div>
+  <div style="max-width: 800px; margin: 0 auto; text-align: center; color: var(--text-secondary); line-height: 1.8;">
+    <p style="margin-bottom: 20px;">Grand Line Archives is a fan-curated tribute to Eiichiro Oda's masterpiece, <em>One Piece</em>. Built by fans, for fans — completely free, ad-free, and constantly expanding.</p>
+    <p>All character information, names, and references belong to Eiichiro Oda, Shueisha, and Toei Animation. This site exists purely to celebrate the greatest pirate story ever told.</p>
+  </div>
+</section>
 
 <div class="modal" id="modal">
   <div class="modal-content">
-    <button class="close-btn" onclick="closeModal()">×</button>
-    <div id="modal-body"></div>
-  </div>
-</div>
-
-<footer>
-  Grand Line Archives · Fan-made tribute to Eiichiro Oda's One Piece · Hosted on GitHub Pages
-</footer>
-
-<script>
-const characters = [
-  { name: "Monkey D. Luffy", affiliation: "Straw Hat Pirates", role: "Captain", devilFruit: "Gomu Gomu no Mi (Hito Hito no Mi, Model: Nika)", bounty: "3,000,000,000 Berries", origin: "Foosha Village, East Blue", bio: "Captain of the Straw Hat Pirates and the future Pirate King. Dreams of finding the One Piece. A rubber man with a heart bigger than the Grand Line itself." },
-  { name: "Roronoa Zoro", affiliation: "Straw Hat Pirates", role: "Swordsman", devilFruit: "None", bounty: "1,111,000,000 Berries", origin: "Shimotsuki Village, East Blue", bio: "Master of the Three-Sword Style. Aims to become the world's greatest swordsman. Lost in any town with more than two streets." },
-  { name: "Nami", affiliation: "Straw Hat Pirates", role: "Navigator", devilFruit: "None", bounty: "366,000,000 Berries", origin: "Cocoyasi Village, East Blue", bio: "Master cartographer and navigator. Dreams of mapping the entire world. Will absolutely steal your treasure." },
-  { name: "Usopp", affiliation: "Straw Hat Pirates", role: "Sniper", devilFruit: "None", bounty: "500,000,000 Berries", origin: "Syrup Village, East Blue", bio: "God Usopp, the brave warrior of the sea. Sniper of the crew. Tells lies that sometimes come true." },
-  { name: "Sanji", affiliation: "Straw Hat Pirates", role: "Cook", devilFruit: "None", bounty: "1,032,000,000 Berries", origin: "Germa Kingdom, North Blue", bio: "The Black Leg. Master chef who refuses to let anyone go hungry. Cannot harm a woman, no matter the cost." },
-  { name: "Tony Tony Chopper", affiliation: "Straw Hat Pirates", role: "Doctor", devilFruit: "Hito Hito no Mi", bounty: "1,000 Berries", origin: "Drum Island, Grand Line", bio: "Reindeer doctor with seven transformation forms. Wants to cure any disease in the world." },
-  { name: "Nico Robin", affiliation: "Straw Hat Pirates", role: "Archaeologist", devilFruit: "Hana Hana no Mi", bounty: "930,000,000 Berries", origin: "Ohara, West Blue", bio: "Sole survivor of Ohara. Can read Poneglyphs. Sprouts limbs anywhere she chooses." },
-  { name: "Franky", affiliation: "Straw Hat Pirates", role: "Shipwright", devilFruit: "None", bounty: "394,000,000 Berries", origin: "Water 7, Grand Line", bio: "Cyborg shipwright who built the Thousand Sunny. SUPER!" },
-  { name: "Brook", affiliation: "Straw Hat Pirates", role: "Musician", devilFruit: "Yomi Yomi no Mi", bounty: "383,000,000 Berries", origin: "West Blue", bio: "Living skeleton musician. Soul King. Yohohoho!" },
-  { name: "Jinbe", affiliation: "Straw Hat Pirates", role: "Helmsman", devilFruit: "None", bounty: "1,100,000,000 Berries", origin: "Fish-Man Island", bio: "Knight of the Sea. Master of Fish-Man Karate. Former Warlord." },
-  { name: "Shanks", affiliation: "Yonko", role: "Captain of Red-Hair Pirates", devilFruit: "None (formerly Gomu Gomu no Mi - speculation)", bounty: "4,048,900,000 Berries", origin: "West Blue", bio: "Red-Haired Shanks. Gave Luffy his straw hat. One of the Four Emperors." },
-  { name: "Marshall D. Teach", affiliation: "Yonko", role: "Captain of Blackbeard Pirates", devilFruit: "Yami Yami no Mi & Gura Gura no Mi", bounty: "3,996,000,000 Berries", origin: "Unknown", bio: "Blackbeard. The only known wielder of two Devil Fruits. Zehahaha!" },
-  { name: "Charlotte Linlin", affiliation: "Yonko", role: "Captain of Big Mom Pirates", devilFruit: "Soru Soru no Mi", bounty: "4,388,000,000 Berries", origin: "Elbaf", bio: "Big Mom. Ruler of Totto Land. Craves a country where all races live together." },
-  { name: "Kaido", affiliation: "Yonko", role: "Captain of Beasts Pirates", devilFruit: "Uo Uo no Mi, Model: Seiryu", bounty: "4,611,100,000 Berries", origin: "Unknown", bio: "King of the Beasts. Strongest creature in the world. Wants to die in glorious battle." },
-  { name: "Dracule Mihawk", affiliation: "Warlord", role: "World's Strongest Swordsman", devilFruit: "None", bounty: "3,590,000,000 Berries", origin: "Unknown", bio: "Hawk Eyes. Wields the black blade Yoru. Zoro's ultimate goal." },
-  { name: "Boa Hancock", affiliation: "Warlord", role: "Empress of Amazon Lily", devilFruit: "Mero Mero no Mi", bounty: "1,659,000,000 Berries", origin: "Amazon Lily", bio: "Pirate Empress. Most beautiful woman in the world. Hopelessly in love with Luffy." },
-  { name: "Crocodile", affiliation: "Cross Guild", role: "Co-leader", devilFruit: "Suna Suna no Mi", bounty: "1,965,000,000 Berries", origin: "West Blue", bio: "Former Warlord. Sand-man. Rules Cross Guild alongside Mihawk and Buggy." },
-  { name: "Buggy", affiliation: "Yonko", role: "Captain of Cross Guild", devilFruit: "Bara Bara no Mi", bounty: "3,189,000,000 Berries", origin: "Grand Line", bio: "Buggy the Star Clown. Somehow became a Yonko through pure dumb luck and charisma." },
-  { name: "Monkey D. Garp", affiliation: "Marine", role: "Vice Admiral (Hero of the Marines)", devilFruit: "None", bounty: "N/A", origin: "Foosha Village, East Blue", bio: "Luffy's grandfather. Cornered Roger countless times. Pure Haki monster." },
-  { name: "Sakazuki (Akainu)", affiliation: "Marine", role: "Fleet Admiral", devilFruit: "Magu Magu no Mi", bounty: "N/A", origin: "Unknown", bio: "Fleet Admiral of the Marines. Believer in Absolute Justice. Magma man." },
-  { name: "Kuzan (Aokiji)", affiliation: "Blackbeard Pirates", role: "Former Admiral", devilFruit: "Hie Hie no Mi", bounty: "Unknown", origin: "Unknown", bio: "Former Admiral. Lazy Justice. Now allied with Blackbeard for mysterious reasons." },
-  { name: "Borsalino (Kizaru)", affiliation: "Marine", role: "Admiral", devilFruit: "Pika Pika no Mi", bounty: "N/A", origin: "Unknown", bio: "Light-speed Admiral. Unclear Justice. Always sounds like he doesn't want to be there." },
-  { name: "Issho (Fujitora)", affiliation: "Marine", role: "Admiral", devilFruit: "Zushi Zushi no Mi", bounty: "N/A", origin: "Unknown", bio: "Blind Admiral with gravity powers. Wants to abolish the Warlord system. Honorable man." },
-  { name: "Monkey D. Dragon", affiliation: "Revolutionary", role: "Supreme Commander", devilFruit: "Unknown", bounty: "Unknown (highest in world)", origin: "Foosha Village, East Blue", bio: "The most wanted man in the world. Luffy's father. Leader of the Revolutionary Army." },
-  { name: "Sabo", affiliation: "Revolutionary", role: "Chief of Staff", devilFruit: "Mera Mera no Mi", bounty: "602,000,000 Berries", origin: "Goa Kingdom, East Blue", bio: "Luffy's sworn brother. Inherited Ace's flame powers. Flame Emperor." },
-  { name: "Portgas D. Ace", affiliation: "Whitebeard Pirates (deceased)", role: "2nd Division Commander", devilFruit: "Mera Mera no Mi", bounty: "550,000,000 Berries", origin: "Baterilla, South Blue", bio: "Fire Fist Ace. Son of Gol D. Roger. Luffy's sworn brother. Died at Marineford." },
-  { name: "Edward Newgate", affiliation: "Whitebeard Pirates (deceased)", role: "Captain", devilFruit: "Gura Gura no Mi", bounty: "5,046,000,000 Berries", origin: "Sphinx", bio: "Whitebeard. Strongest man in the world. Died standing at Marineford." },
-  { name: "Gol D. Roger", affiliation: "Roger Pirates (deceased)", role: "Pirate King", devilFruit: "None", bounty: "5,564,800,000 Berries", origin: "Loguetown, East Blue", bio: "The Pirate King. Found the One Piece. Started the Great Pirate Era." },
-  { name: "Trafalgar D. Water Law", affiliation: "Heart Pirates", role: "Captain", devilFruit: "Ope Ope no Mi", bounty: "3,000,000,000 Berries", origin: "Flevance, North Blue", bio: "Surgeon of Death. Worst Generation. One of Luffy's greatest allies." },
-  { name: "Eustass Kid", affiliation: "Kid Pirates", role: "Captain", devilFruit: "Jiki Jiki no Mi", bounty: "3,000,000,000 Berries", origin: "South Blue", bio: "Worst Generation. Magnetic powers. Same dream as Luffy: Pirate King." }
-];
-
-const grid = document.getElementById('grid');
-const search = document.getElementById('search');
-const filter = document.getElementById('filter');
-const modal = document.getElementById('modal');
-const modalBody = document.getElementById('modal-body');
-
-function getCategory(c) {
-  if (c.affiliation.includes("Yonko")) return "Yonko";
-  if (c.affiliation.includes("Warlord")) return "Warlord";
-  if (c.affiliation.includes("Marine")) return "Marine";
-  if (c.affiliation.includes("Revolutionary")) return "Revolutionary";
-  if (c.affiliation.includes("Straw Hat")) return "Straw Hat Pirates";
-  return "Other";
-}
-
-function render() {
-  const q = search.value.toLowerCase();
-  const f = filter.value;
-  grid.innerHTML = '';
-  characters
-    .filter(c => c.name.toLowerCase().includes(q))
-    .filter(c => f === 'all' || getCategory(c) === f)
-    .forEach(c => {
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.innerHTML = `
-        <h3>${c.name}</h3>
-        <span class="affiliation">${c.affiliation}</span>
-        <p>${c.bio.substring(0, 90)}...</p>
-      `;
-      card.onclick = () => openModal(c);
-      grid.appendChild(card);
-    });
-}
-
-function openModal(c) {
-  modalBody.innerHTML = `
-    <h2>${c.name}</h2>
-    <div class="stat"><strong>Affiliation:</strong> ${c.affiliation}</div>
-    <div class="stat"><strong>Role:</strong> ${c.role}</div>
-    <div class="stat"><strong>Devil Fruit:</strong> ${c.devilFruit}</div>
-    <div class="stat"><strong>Bounty:</strong> ${c.bounty}</div>
-    <div class="stat"><strong>Origin:</strong> ${c.origin}</div>
-    <div class="stat" style="margin-top:18px; line-height:1.6;">${c.bio}</div>
-  `;
-  modal.classList.add('active');
-}
-
-function closeModal() { modal.classList.remove('active'); }
-
-modal.onclick = (e) => { if (e.target === modal) closeModal(); };
-search.oninput = render;
-filter.onchange = render;
-render();
-</script>
-
-</body>
-  </html>
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <div class="modal-image"
