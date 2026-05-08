@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grand Line Archives | One Piece Database</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-primary: #0a0e1a;
+    --bg-secondary: #111827;
+    --bg-card: rgba(30, 41, 59, 0.6);
+    --accent: #f59e0b;
+    --accent-hover: #fbbf24;
+    --accent-dark: #b45309;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --border: rgba(245, 158, 11, 0.2);
+    --red: #dc2626;
+    --blue: #2563eb;
+    --green: #16a34a;
+    --purple: #9333ea;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, .logo { font-family: 'Cinzel', serif; }
+
+  /* NAVIGATION */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(10, 14, 26, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 16px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .logo span { color: var(--text-primary); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    font-size: 0.95rem;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .menu-btn { display: none; background: none; border: none; color: var(--accent); font-size: 1.5rem; cursor: pointer; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 20px 40px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at top, rgba(245, 158, 11, 0.15), transparent 60%),
+      radial-gradient(ellipse at bottom, rgba(37, 99, 235, 0.2), transparent 60%),
+      var(--bg-primary);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(220, 38, 38, 0.08) 0%, transparent 40%);
+    animation: pulse 8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+  .hero h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent) 0%, #ef4444 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 20px;
+    letter-spacing: 3px;
+    line-height: 1.1;
+  }
+  .hero p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+    margin-top: 50px;
+  }
+  .stat-item .number {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--accent);
+  }
+  .stat-item .label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #0a0e1a;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 1px;
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+  }
+
+  /* SECTIONS */
+  section { padding: 100px 40px; max-width: 1400px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 60px; }
+  .section-header h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .section-header h2 span { color: var(--accent); }
+  .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .controls input, .controls select {
+    padding: 14px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    min-width: 240px;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s;
+  }
+  .controls input:focus, .controls select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .controls input::placeholder { color: var(--text-secondary); }
+
+  /* CHARACTER GRID */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(245, 158, 11, 0.2);
+  }
+  .card-image {
+    width: 100%;
+    height: 280px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+  }
+  .card:hover .card-image img { transform: scale(1.08); }
+  .card-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(10, 14, 26, 0.95));
+  }
+  .card-bounty {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(220, 38, 38, 0.95);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    z-index: 2;
+  }
+  .card-body { padding: 20px; flex: 1; }
+  .card-body h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .card-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .card-body p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* CREWS SECTION */
+  .crews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .crew-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .crew-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+  }
+  .crew-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+  .crew-card h3 {
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+  }
+  .crew-card p { color: var(--text-secondary); font-size: 0.9rem; }
+
+  /* DEVIL FRUITS */
+  .fruits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .fruit-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: transform 0.3s;
+  }
+  .fruit-card:hover { transform: translateY(-4px); }
+  .fruit-type {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .fruit-type.paramecia { background: rgba(220, 38, 38, 0.2); color: #f87171; }
+  .fruit-type.zoan { background: rgba(22, 163, 74, 0.2); color: #4ade80; }
+  .fruit-type.logia { background: rgba(37, 99, 235, 0.2); color: #60a5fa; }
+  .fruit-card h4 { color: var(--text-primary); margin-bottom: 6px; }
+  .fruit-card p { color: var(--text-secondary); font-size: 0.85rem; }
+
+  /* MODAL */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal.active { display: flex; }
+  .modal-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--accent);
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    animation: slideUp 0.3s;
+  }
+  @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-image {
+    height: 100%;
+    min-height: 400px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    overflow: hidden;
+  }
+  .modal-image img { width: 100%; height: 100%; object-fit: cover; }
+  .modal-info { padding: 40px; }
+  .modal-info h2 { color: var(--accent); margin-bottom: 8px; font-size: 2rem; }
+  .modal-info .subtitle { color: var(--text-secondary); margin-bottom: 24px; font-style: italic; }
+  .modal-stats {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: var(--bg-card);
+    border-radius: 12px;
+  }
+  .modal-stats .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .modal-stats .row:last-child { border: none; }
+  .modal-stats .label { color: var(--text-secondary); font-weight: 600; }
+  .modal-stats .value { color: var(--text-primary); text-align: right; }
+  .modal-bio { color: var(--text-secondary); line-height: 1.7; }
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    color: var(--accent);
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+  .close-btn:hover { background: var(--accent); color: var(--bg-primary); }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg-secondary);
+    padding: 60px 40px 30px;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .footer-col h4 { color: var(--accent); margin-bottom: 16px; font-family: 'Cinzel', serif; }
+  .footer-col p, .footer-col a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--accent); }
+  .footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links {
+      position: fixed;
+      top: 60px; right: 0;
+      background: var(--bg-secondary);
+      flex-direction: column;
+      padding: 20px;
+      width: 200px;
+      transform: translateX(100%);
+      transition: transform 0.3s;
+      border-left: 1px solid var(--border);
+      height: calc(100vh - 60px);
+    }
+    .nav-links.open { transform: translateX(0); }
+    .menu-btn { display: block; }
+    section { padding: 70px 20px; }
+    .modal-content { grid-template-columns: 1fr; }
+    .modal-image { min-height: 250px; }
+    .modal-info { padding: 24px; }
+    .hero-stats { gap: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">GRAND LINE <span>ARCHIVES</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#characters">Characters</a></li>
+    <li><a href="#crews">Crews</a></li>
+    <li><a href="#fruits">Devil Fruits</a></li>
+    <li><a href="#about">About</a></li>
+  </ul>
+  <button class="menu-btn" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h1>THE ONE PIECE<br>IS REAL</h1>
+    <p>The most comprehensive fan-curated database of every legend, pirate, marine, and revolutionary across the Grand Line.</p>
+    <a href="#characters" class="cta-btn">Explore Characters</a>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="number" id="charCount">30+</div>
+        <div class="label">Characters</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">4</div>
+        <div class="label">Yonko</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">∞</div>
+        <div class="label">Adventure</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="characters">
+  <div class="section-header">
+    <h2>Character <span>Database</span></h2>
+    <p>Every legend who ever set sail. Search, filter, and explore.</p>
+  </div>
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search by name...">
+    <select id="filter">
+      <option value="all">All Affiliations</option>
+      <option value="Straw Hat Pirates">Straw Hat Pirates</option>
+      <option value="Yonko">Yonko</option>
+      <option value="Warlord">Warlord</option>
+      <option value="Marine">Marine</option>
+      <option value="Revolutionary">Revolutionary</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="crews">
+  <div class="section-header">
+    <h2>Major <span>Crews & Factions</span></h2>
+    <p>The forces shaping the world.</p>
+  </div>
+  <div class="crews-grid" id="crewsGrid"></div>
+</section>
+
+<section id="fruits">
+  <div class="section-header">
+    <h2>Devil <span>Fruits</span></h2>
+    <p>Mysterious fruits granting godlike abilities at the cost of swimming.</p>
+  </div>
+  <div class="fruits-grid" id="fruitsGrid"></div>
+</section>
+
+<section id="about">
+  <div class="section-header">
+    <h2>About <span>This Archive</span></h2>
+  </div>
+  <div style="max-width: 800px; margin: 0 auto; text-align: center; color: var(--text-secondary); line-height: 1.8;">
+    <p style="margin-bottom: 20px;">Grand Line Archives is a fan-curated tribute to Eiichiro Oda's masterpiece, <em>One Piece</em>. Built by fans, for fans — completely free, ad-free, and constantly expanding.</p>
+    <p>All character information, names, and references belong to Eiichiro Oda, Shueisha, and Toei Animation. This site exists purely to celebrate the greatest pirate story ever told.</p>
+  </div>
+</section>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <div class="modal-image"onclick="closeM
