@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grand Line Archives — One Piece Character Database</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Georgia', serif;
+    background: linear-gradient(135deg, #0a1929 0%, #1a3a5c 100%);
+    color: #f4e9d8;
+    min-height: 100vh;
+  }
+  header {
+    background: rgba(0,0,0,0.6);
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 3px solid #d4a017;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+  header h1 {
+    font-size: 2.8rem;
+    color: #d4a017;
+    text-shadow: 2px 2px 4px #000;
+    letter-spacing: 2px;
+  }
+  header p { margin-top: 8px; color: #f4e9d8; font-style: italic; }
+  .controls {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .controls input, .controls select {
+    padding: 12px 18px;
+    border: 2px solid #d4a017;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.4);
+    color: #f4e9d8;
+    font-size: 1rem;
+    min-width: 220px;
+  }
+  .controls input::placeholder { color: #aaa; }
+  .grid {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+  }
+  .card {
+    background: rgba(20, 40, 70, 0.85);
+    border: 2px solid #d4a017;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 24px rgba(212, 160, 23, 0.4);
+  }
+  .card h3 { color: #d4a017; font-size: 1.4rem; margin-bottom: 8px; }
+  .card .affiliation {
+    display: inline-block;
+    background: #8b1a1a;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+  }
+  .card p { font-size: 0.95rem; line-height: 1.5; }
+  .modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .modal.active { display: flex; }
+  .modal-content {
+    background: linear-gradient(135deg, #1a3a5c, #0a1929);
+    border: 3px solid #d4a017;
+    border-radius: 12px;
+    padding: 35px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  .modal-content h2 { color: #d4a017; font-size: 2rem; margin-bottom: 15px; }
+  .modal-content .stat { margin: 10px 0; }
+  .modal-content .stat strong { color: #d4a017; }
+  .close-btn {
+    position: absolute;
+    top: 12px; right: 18px;
+    font-size: 2rem;
+    color: #d4a017;
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+  footer {
+    text-align: center;
+    padding: 25px;
+    margin-top: 40px;
+    background: rgba(0,0,0,0.6);
+    color: #aaa;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⚓ Grand Line Archives ⚓</h1>
+  <p>The Complete One Piece Character Database</p>
+</header>
+
+<div class="controls">
+  <input type="text" id="search" placeholder="Search by name...">
+  <select id="filter">
+    <option value="all">All Affiliations</option>
+    <option value="Straw Hat Pirates">Straw Hat Pirates</option>
+    <option value="Yonko">Yonko</option>
+    <option value="Warlord">Warlord</option>
+    <option value="Marine">Marine</option>
+    <option value="Revolutionary">Revolutionary</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal()">×</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<footer>
+  Grand Line Archives · Fan-made tribute to Eiichiro Oda's One Piece · Hosted on GitHub Pages
+</footer>
+
+<script>
+const characters = [
+  { name: "Monkey D. Luffy", affiliation: "Straw Hat Pirates", role: "Captain", devilFruit: "Gomu Gomu no Mi (Hito Hito no Mi, Model: Nika)", bounty: "3,000,000,000 Berries", origin: "Foosha Village, East Blue", bio: "Captain of the Straw Hat Pirates and the future Pirate King. Dreams of finding the One Piece. A rubber man with a heart bigger than the Grand Line itself." },
+  { name: "Roronoa Zoro", affiliation: "Straw Hat Pirates", role: "Swordsman", devilFruit: "None", bounty: "1,111,000,000 Berries", origin: "Shimotsuki Village, East Blue", bio: "Master of the Three-Sword Style. Aims to become the world's greatest swordsman. Lost in any town with more than two streets." },
+  { name: "Nami", affiliation: "Straw Hat Pirates", role: "Navigator", devilFruit: "None", bounty: "366,000,000 Berries", origin: "Cocoyasi Village, East Blue", bio: "Master cartographer and navigator. Dreams of mapping the entire world. Will absolutely steal your treasure." },
+  { name: "Usopp", affiliation: "Straw Hat Pirates", role: "Sniper", devilFruit: "None", bounty: "500,000,000 Berries", origin: "Syrup Village, East Blue", bio: "God Usopp, the brave warrior of the sea. Sniper of the crew. Tells lies that sometimes come true." },
+  { name: "Sanji", affiliation: "Straw Hat Pirates", role: "Cook", devilFruit: "None", bounty: "1,032,000,000 Berries", origin: "Germa Kingdom, North Blue", bio: "The Black Leg. Master chef who refuses to let anyone go hungry. Cannot harm a woman, no matter the cost." },
+  { name: "Tony Tony Chopper", affiliation: "Straw Hat Pirates", role: "Doctor", devilFruit: "Hito Hito no Mi", bounty: "1,000 Berries", origin: "Drum Island, Grand Line", bio: "Reindeer doctor with seven transformation forms. Wants to cure any disease in the world." },
+  { name: "Nico Robin", affiliation: "Straw Hat Pirates", role: "Archaeologist", devilFruit: "Hana Hana no Mi", bounty: "930,000,000 Berries", origin: "Ohara, West Blue", bio: "Sole survivor of Ohara. Can read Poneglyphs. Sprouts limbs anywhere she chooses." },
+  { name: "Franky", affiliation: "Straw Hat Pirates", role: "Shipwright", devilFruit: "None", bounty: "394,000,000 Berries", origin: "Water 7, Grand Line", bio: "Cyborg shipwright who built the Thousand Sunny. SUPER!" },
+  { name: "Brook", affiliation: "Straw Hat Pirates", role: "Musician", devilFruit: "Yomi Yomi no Mi", bounty: "383,000,000 Berries", origin: "West Blue", bio: "Living skeleton musician. Soul King. Yohohoho!" },
+  { name: "Jinbe", affiliation: "Straw Hat Pirates", role: "Helmsman", devilFruit: "None", bounty: "1,100,000,000 Berries", origin: "Fish-Man Island", bio: "Knight of the Sea. Master of Fish-Man Karate. Former Warlord." },
+  { name: "Shanks", affiliation: "Yonko", role: "Captain of Red-Hair Pirates", devilFruit: "None (formerly Gomu Gomu no Mi - speculation)", bounty: "4,048,900,000 Berries", origin: "West Blue", bio: "Red-Haired Shanks. Gave Luffy his straw hat. One of the Four Emperors." },
+  { name: "Marshall D. Teach", affiliation: "Yonko", role: "Captain of Blackbeard Pirates", devilFruit: "Yami Yami no Mi & Gura Gura no Mi", bounty: "3,996,000,000 Berries", origin: "Unknown", bio: "Blackbeard. The only known wielder of two Devil Fruits. Zehahaha!" },
+  { name: "Charlotte Linlin", affiliation: "Yonko", role: "Captain of Big Mom Pirates", devilFruit: "Soru Soru no Mi", bounty: "4,388,000,000 Berries", origin: "Elbaf", bio: "Big Mom. Ruler of Totto Land. Craves a country where all races live together." },
+  { name: "Kaido", affiliation: "Yonko", role: "Captain of Beasts Pirates", devilFruit: "Uo Uo no Mi, Model: Seiryu", bounty: "4,611,100,000 Berries", origin: "Unknown", bio: "King of the Beasts. Strongest creature in the world. Wants to die in glorious battle." },
+  { name: "Dracule Mihawk", affiliation: "Warlord", role: "World's Strongest Swordsman", devilFruit: "None", bounty: "3,590,000,000 Berries", origin: "Unknown", bio: "Hawk Eyes. Wields the black blade Yoru. Zoro's ultimate goal." },
+  { name: "Boa Hancock", affiliation: "Warlord", role: "Empress of Amazon Lily", devilFruit: "Mero Mero no Mi", bounty: "1,659,000,000 Berries", origin: "Amazon Lily", bio: "Pirate Empress. Most beautiful woman in the world. Hopelessly in love with Luffy." },
+  { name: "Crocodile", affiliation: "Cross Guild", role: "Co-leader", devilFruit: "Suna Suna no Mi", bounty: "1,965,000,000 Berries", origin: "West Blue", bio: "Former Warlord. Sand-man. Rules Cross Guild alongside Mihawk and Buggy." },
+  { name: "Buggy", affiliation: "Yonko", role: "Captain of Cross Guild", devilFruit: "Bara Bara no Mi", bounty: "3,189,000,000 Berries", origin: "Grand Line", bio: "Buggy the Star Clown. Somehow became a Yonko through pure dumb luck and charisma." },
+  { name: "Monkey D. Garp", affiliation: "Marine", role: "Vice Admiral (Hero of the Marines)", devilFruit: "None", bounty: "N/A", origin: "Foosha Village, East Blue", bio: "Luffy's grandfather. Cornered Roger countless times. Pure Haki monster." },
+  { name: "Sakazuki (Akainu)", affiliation: "Marine", role: "Fleet Admiral", devilFruit: "Magu Magu no Mi", bounty: "N/A", origin: "Unknown", bio: "Fleet Admiral of the Marines. Believer in Absolute Justice. Magma man." },
+  { name: "Kuzan (Aokiji)", affiliation: "Blackbeard Pirates", role: "Former Admiral", devilFruit: "Hie Hie no Mi", bounty: "Unknown", origin: "Unknown", bio: "Former Admiral. Lazy Justice. Now allied with Blackbeard for mysterious reasons." },
+  { name: "Borsalino (Kizaru)", affiliation: "Marine", role: "Admiral", devilFruit: "Pika Pika no Mi", bounty: "N/A", origin: "Unknown", bio: "Light-speed Admiral. Unclear Justice. Always sounds like he doesn't want to be there." },
+  { name: "Issho (Fujitora)", affiliation: "Marine", role: "Admiral", devilFruit: "Zushi Zushi no Mi", bounty: "N/A", origin: "Unknown", bio: "Blind Admiral with gravity powers. Wants to abolish the Warlord system. Honorable man." },
+  { name: "Monkey D. Dragon", affiliation: "Revolutionary", role: "Supreme Commander", devilFruit: "Unknown", bounty: "Unknown (highest in world)", origin: "Foosha Village, East Blue", bio: "The most wanted man in the world. Luffy's father. Leader of the Revolutionary Army." },
+  { name: "Sabo", affiliation: "Revolutionary", role: "Chief of Staff", devilFruit: "Mera Mera no Mi", bounty: "602,000,000 Berries", origin: "Goa Kingdom, East Blue", bio: "Luffy's sworn brother. Inherited Ace's flame powers. Flame Emperor." },
+  { name: "Portgas D. Ace", affiliation: "Whitebeard Pirates (deceased)", role: "2nd Division Commander", devilFruit: "Mera Mera no Mi", bounty: "550,000,000 Berries", origin: "Baterilla, South Blue", bio: "Fire Fist Ace. Son of Gol D. Roger. Luffy's sworn brother. Died at Marineford." },
+  { name: "Edward Newgate", affiliation: "Whitebeard Pirates (deceased)", role: "Captain", devilFruit: "Gura Gura no Mi", bounty: "5,046,000,000 Berries", origin: "Sphinx", bio: "Whitebeard. Strongest man in the world. Died standing at Marineford." },
+  { name: "Gol D. Roger", affiliation: "Roger Pirates (deceased)", role: "Pirate King", devilFruit: "None", bounty: "5,564,800,000 Berries", origin: "Loguetown, East Blue", bio: "The Pirate King. Found the One Piece. Started the Great Pirate Era." },
+  { name: "Trafalgar D. Water Law", affiliation: "Heart Pirates", role: "Captain", devilFruit: "Ope Ope no Mi", bounty: "3,000,000,000 Berries", origin: "Flevance, North Blue", bio: "Surgeon of Death. Worst Generation. One of Luffy's greatest allies." },
+  { name: "Eustass Kid", affiliation: "Kid Pirates", role: "Captain", devilFruit: "Jiki Jiki no Mi", bounty: "3,000,000,000 Berries", origin: "South Blue", bio: "Worst Generation. Magnetic powers. Same dream as Luffy: Pirate King." }
+];
+
+const grid = document.getElementById('grid');
+const search = document.getElementById('search');
+const filter = document.getElementById('filter');
+const modal = document.getElementById('modal');
+const modalBody = document.getElementById('modal-body');
+
+function getCategory(c) {
+  if (c.affiliation.includes("Yonko")) return "Yonko";
+  if (c.affiliation.includes("Warlord")) return "Warlord";
+  if (c.affiliation.includes("Marine")) return "Marine";
+  if (c.affiliation.includes("Revolutionary")) return "Revolutionary";
+  if (c.affiliation.includes("Straw Hat")) return "Straw Hat Pirates";
+  return "Other";
+}
+
+function render() {
+  const q = search.value.toLowerCase();
+  const f = filter.value;
+  grid.innerHTML = '';
+  characters
+    .filter(c => c.name.toLowerCase().includes(q))
+    .filter(c => f === 'all' || getCategory(c) === f)
+    .forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <h3>${c.name}</h3>
+        <span class="affiliation">${c.affiliation}</span>
+        <p>${c.bio.substring(0, 90)}...</p>
+      `;
+      card.onclick = () => openModal(c);
+      grid.appendChild(card);
+    });
+}
+
+function openModal(c) {
+  modalBody.innerHTML = `
+    <h2>${c.name}</h2>
+    <div class="stat"><strong>Affiliation:</strong> ${c.affiliation}</div>
+    <div class="stat"><strong>Role:</strong> ${c.role}</div>
+    <div class="stat"><strong>Devil Fruit:</strong> ${c.devilFruit}</div>
+    <div class="stat"><strong>Bounty:</strong> ${c.bounty}</div>
+    <div class="stat"><strong>Origin:</strong> ${c.origin}</div>
+    <div class="stat" style="margin-top:18px; line-height:1.6;">${c.bio}</div>
+  `;
+  modal.classList.add('active');
+}
+
+function closeModal() { modal.classList.remove('active'); }
+
+modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+search.oninput = render;
+filter.onchange = render;
+render();
+</script>
+
+</body>
+  </html>
